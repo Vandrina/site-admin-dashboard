@@ -33,7 +33,7 @@ class Dashboard {
     const grid = document.getElementById('sitesGrid');
     
     grid.innerHTML = this.sites.map(site => `
-      <div class="site-card" data-site-id="${site.id}">
+      <div class="site-card card" data-site-id="${site.id}">
         <div class="site-card-header">
           <h3 class="site-name">${site.name}</h3>
           <span class="badge ${site.status === 'up' ? 'badge-success' : 'badge-error'}">

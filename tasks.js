@@ -11,7 +11,8 @@ class TaskManager {
       allSites: true,
       william: false,
       yoursite: false,
-      overdue: false
+      overdue: false,
+      showCompleted: true
     };
     
     this.init();
@@ -27,6 +28,12 @@ class TaskManager {
     document.getElementById('taskFilterBtn').addEventListener('click', () => {
       const filters = document.getElementById('taskFilters');
       filters.style.display = filters.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    // Show/hide completed toggle
+    document.getElementById('showCompletedToggle').addEventListener('change', (e) => {
+      this.filters.showCompleted = e.target.checked;
+      this.renderTasks();
     });
     
     // Search
@@ -56,14 +63,19 @@ class TaskManager {
       this.renderTasks();
     });
     
-    // Add task button
-    document.getElementById('addTaskBtn').addEventListener('click', () => {
+    // Add task buttons (both)
+    document.getElementById('addTaskBtnTop').addEventListener('click', () => {
       this.openTaskModal();
     });
     
     // Export tasks
     document.getElementById('exportTasksBtn').addEventListener('click', () => {
       this.exportToText();
+    });
+    
+    // Settings button
+    document.getElementById('taskSettingsBtn').addEventListener('click', () => {
+      alert('Task Settings\n\nComing soon:\n- Manage categories\n- Manage people/assignees\n- Task templates');
     });
     
     // Modal controls
@@ -84,6 +96,22 @@ class TaskManager {
     
     document.getElementById('addSubtaskBtn').addEventListener('click', () => {
       this.addSubtaskField();
+    });
+    
+    // Category dropdown - handle "add new"
+    document.getElementById('taskCategory').addEventListener('change', (e) => {
+      if (e.target.value === '__new__') {
+        const newCat = prompt('New category name:');
+        if (newCat) {
+          const option = document.createElement('option');
+          option.value = newCat;
+          option.textContent = newCat;
+          e.target.insertBefore(option, e.target.lastElementChild);
+          e.target.value = newCat;
+        } else {
+          e.target.value = '';
+        }
+      }
     });
     
     // Close modal on background click
@@ -121,9 +149,9 @@ class TaskManager {
       });
     }
     
-    // Jesse's tasks second
+    // Double divider before Jesse's section
     if (Object.keys(byAssignee.jesse).length > 0) {
-      html += `<div class="task-section-header">Jesse</div>`;
+      html += `<div class="task-section-header divider">Jesse</div>`;
       Object.keys(byAssignee.jesse).forEach(category => {
         html += `<div class="task-category label">${category.toUpperCase()}</div>`;
         byAssignee.jesse[category].forEach(task => {
@@ -187,6 +215,11 @@ class TaskManager {
   getFilteredTasks() {
     let filtered = [...this.tasks];
     
+    // Show/hide completed
+    if (!this.filters.showCompleted) {
+      filtered = filtered.filter(t => !t.completed);
+    }
+    
     // Search filter
     if (this.filters.search) {
       filtered = filtered.filter(t => 
@@ -232,7 +265,19 @@ class TaskManager {
     // Populate form
     document.getElementById('taskModalTitle').textContent = task ? 'Edit Task' : 'New Task';
     document.getElementById('taskName').value = task ? task.title : '';
-    document.getElementById('taskCategory').value = task ? task.category : '';
+    
+    // Handle category dropdown - check if value exists, otherwise select empty
+    const categorySelect = document.getElementById('taskCategory');
+    const taskCategory = task ? task.category : '';
+    if (taskCategory && ![...categorySelect.options].some(opt => opt.value === taskCategory)) {
+      // Add missing category
+      const option = document.createElement('option');
+      option.value = taskCategory;
+      option.textContent = taskCategory;
+      categorySelect.insertBefore(option, categorySelect.lastElementChild);
+    }
+    categorySelect.value = taskCategory;
+    
     document.getElementById('taskSite').value = task ? task.site : '';
     document.getElementById('taskDueDate').value = task ? task.dueDate : '';
     document.getElementById('taskPriority').value = task ? task.priority : '';
@@ -313,9 +358,11 @@ class TaskManager {
       }
     });
     
+    const category = document.getElementById('taskCategory').value;
+    
     const taskData = {
       title: name,
-      category: document.getElementById('taskCategory').value.trim(),
+      category: category === '__new__' ? '' : category,
       site: document.getElementById('taskSite').value,
       dueDate: document.getElementById('taskDueDate').value,
       priority: document.getElementById('taskPriority').value,

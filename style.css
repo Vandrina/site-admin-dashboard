@@ -229,9 +229,7 @@ input[type="checkbox"] {
    ALERT BANNER (Below Header)
    ══════════════════════════════════════════════════════════════ */
 .alert-banner {
-  background: var(--alert-bg);
-  border-bottom: 1px solid var(--accent);
-  padding: 14px 0;
+  padding: 0;
   display: none;
 }
 
@@ -242,7 +240,13 @@ input[type="checkbox"] {
 .alert-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 14px 24px;
+  margin: 0 32px;
+  background: var(--alert-bg);
+  border: 1px solid var(--accent);
+  border-top: none;
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
   display: flex;
   align-items: center;
   gap: 16px;
@@ -336,16 +340,6 @@ input[type="checkbox"] {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   CARD COMPONENT
-   ══════════════════════════════════════════════════════════════ */
-.card {
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-}
-
-/* ══════════════════════════════════════════════════════════════
    TASK SIDEBAR
    ══════════════════════════════════════════════════════════════ */
 .task-sidebar {
@@ -367,6 +361,25 @@ input[type="checkbox"] {
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+}
+
+.task-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.task-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
 }
 
 .task-filters {
@@ -412,6 +425,13 @@ input[type="checkbox"] {
 
 .task-section-header:first-child {
   margin-top: 0;
+}
+
+.task-section-header.divider {
+  border-top: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  padding: 10px 0;
+  margin-top: 24px;
 }
 
 .task-category {
@@ -516,14 +536,18 @@ input[type="checkbox"] {
 .task-sidebar-footer {
   padding-top: 12px;
   border-top: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .sidebar-actions {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-divider {
+  color: var(--muted);
+  user-select: none;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -537,14 +561,9 @@ input[type="checkbox"] {
 }
 
 .site-card {
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
+  /* Extends .card universal */
   cursor: pointer;
   transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
 }
 
 .site-card:hover {

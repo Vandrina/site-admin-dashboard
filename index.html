@@ -44,6 +44,14 @@
         <button class="icon-btn" id="taskFilterBtn" aria-label="Filter tasks">⌕</button>
       </div>
 
+      <div class="task-controls">
+        <button class="btn btn-add" id="addTaskBtnTop">+ New Task</button>
+        <label class="task-toggle">
+          <input type="checkbox" id="showCompletedToggle" checked>
+          <span>Show completed</span>
+        </label>
+      </div>
+
       <div class="task-filters" id="taskFilters" style="display: none;">
         <input type="text" class="task-search" placeholder="Search tasks..." id="taskSearch" aria-label="Search tasks">
         <div class="filter-group">
@@ -54,10 +62,10 @@
             <input type="checkbox" id="filterWilliam"> William
           </label>
           <label class="filter-label">
-            <input type="checkbox" id="filterYourSite"> Your Site
+            <input type="checkbox" id="filterOverdue"> Overdue
           </label>
           <label class="filter-label">
-            <input type="checkbox" id="filterOverdue"> Overdue
+            <input type="checkbox" id="filterYourSite"> Your Site
           </label>
         </div>
       </div>
@@ -67,9 +75,10 @@
       </div>
 
       <div class="task-sidebar-footer">
-        <button class="btn btn-add" id="addTaskBtn">+ New Task</button>
         <div class="sidebar-actions">
           <button class="btn-link" id="exportTasksBtn" title="Export to text">Export Tasks</button>
+          <span class="action-divider">•</span>
+          <button class="btn-link" id="taskSettingsBtn" title="Manage categories and people">Settings</button>
         </div>
       </div>
     </aside>
@@ -120,7 +129,15 @@
           <div class="form-row">
             <div class="form-group">
               <label>Category</label>
-              <input type="text" id="taskCategory" placeholder="e.g., ## William">
+              <select id="taskCategory">
+                <option value="">None</option>
+                <option value="OVERALL">Overall</option>
+                <option value="Image Sorting">Image Sorting</option>
+                <option value="Homepage">Homepage</option>
+                <option value="Jesse's Stuff">Jesse's Stuff</option>
+                <option value="Accessibility">Accessibility</option>
+                <option value="__new__">+ Add New Category</option>
+              </select>
             </div>
             <div class="form-group">
               <label>Site</label>
