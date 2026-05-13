@@ -136,6 +136,16 @@ class TaskManager {
       byAssignee[assignee][cat].push(task);
     });
     
+    // Sort tasks within each category: incomplete first, then completed
+    Object.keys(byAssignee).forEach(assignee => {
+      Object.keys(byAssignee[assignee]).forEach(category => {
+        byAssignee[assignee][category].sort((a, b) => {
+          if (a.completed === b.completed) return 0;
+          return a.completed ? 1 : -1;
+        });
+      });
+    });
+    
     let html = '';
     
     // William's tasks first
@@ -149,9 +159,12 @@ class TaskManager {
       });
     }
     
-    // Double divider before Jesse's section
+    // Simple divider before Jesse's section
     if (Object.keys(byAssignee.jesse).length > 0) {
-      html += `<div class="task-section-header divider">Jesse</div>`;
+      if (Object.keys(byAssignee.william).length > 0) {
+        html += `<div class="task-section-divider"></div>`;
+      }
+      html += `<div class="task-section-header">Jesse</div>`;
       Object.keys(byAssignee.jesse).forEach(category => {
         html += `<div class="task-category label">${category.toUpperCase()}</div>`;
         byAssignee.jesse[category].forEach(task => {

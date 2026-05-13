@@ -238,7 +238,7 @@ input[type="checkbox"] {
 }
 
 .alert-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 14px 24px;
   margin: 0 32px;
@@ -297,6 +297,10 @@ input[type="checkbox"] {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.header-btn {
+  position: relative;
 }
 
 .alert-badge {
@@ -365,11 +369,18 @@ input[type="checkbox"] {
 
 .task-controls {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 16px;
+}
+
+.task-controls .btn-add {
+  width: auto;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .task-toggle {
@@ -427,11 +438,11 @@ input[type="checkbox"] {
   margin-top: 0;
 }
 
-.task-section-header.divider {
-  border-top: 2px solid var(--accent);
-  border-bottom: 2px solid var(--accent);
-  padding: 10px 0;
-  margin-top: 24px;
+.task-section-divider {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 24px 0 20px 0;
+  height: 8px;
 }
 
 .task-category {
@@ -637,6 +648,8 @@ input[type="checkbox"] {
 .btn-add-site {
   width: 100%;
   max-width: 400px;
+  margin: 0 auto;
+  display: block;
 }
 
 /* ══════════════════════════════════════════════════════════════
