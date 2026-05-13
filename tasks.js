@@ -6,6 +6,7 @@ class TaskManager {
   constructor() {
     this.tasks = loadFromStorage('tasks', TASKS_DATA);
     this.currentTask = null;
+    this.collapsedCategories = new Set(); // Track collapsed categories
     this.filters = {
       search: '',
       allSites: true,
@@ -152,10 +153,19 @@ class TaskManager {
     if (Object.keys(byAssignee.william).length > 0) {
       html += `<div class="task-section-header">William</div>`;
       Object.keys(byAssignee.william).forEach(category => {
-        html += `<div class="task-category label">${category.toUpperCase()}</div>`;
+        const categoryId = `william-${category}`;
+        const isCollapsed = this.collapsedCategories.has(categoryId);
+        const chevron = isCollapsed ? '›' : '▾';
+        
+        html += `<div class="task-category label category-header" data-category-id="${categoryId}">
+          <span class="category-chevron">${chevron}</span>
+          ${category.toUpperCase()}
+        </div>`;
+        html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         byAssignee.william[category].forEach(task => {
           html += this.renderTaskItem(task);
         });
+        html += `</div>`;
       });
     }
     
@@ -168,10 +178,19 @@ class TaskManager {
       
       // ALERTS category always first
       if (byAssignee.jesse['ALERTS']) {
-        html += `<div class="task-category label">ALERTS</div>`;
+        const categoryId = 'jesse-ALERTS';
+        const isCollapsed = this.collapsedCategories.has(categoryId);
+        const chevron = isCollapsed ? '›' : '▾';
+        
+        html += `<div class="task-category label category-header" data-category-id="${categoryId}">
+          <span class="category-chevron">${chevron}</span>
+          ALERTS
+        </div>`;
+        html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         byAssignee.jesse['ALERTS'].forEach(task => {
           html += this.renderTaskItem(task);
         });
+        html += `</div>`;
       }
       
       // Group remaining tasks by priority and site
@@ -188,10 +207,19 @@ class TaskManager {
       
       // Urgent section (with site tags)
       if (urgentTasks.length > 0) {
-        html += `<div class="task-category label">URGENT</div>`;
+        const categoryId = 'jesse-URGENT';
+        const isCollapsed = this.collapsedCategories.has(categoryId);
+        const chevron = isCollapsed ? '›' : '▾';
+        
+        html += `<div class="task-category label category-header" data-category-id="${categoryId}">
+          <span class="category-chevron">${chevron}</span>
+          URGENT
+        </div>`;
+        html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         urgentTasks.forEach(task => {
           html += this.renderTaskItem(task, true); // true = show site tag
         });
+        html += `</div>`;
       }
       
       // Group non-urgent by site
@@ -208,14 +236,36 @@ class TaskManager {
                         site === 'yoursite' ? 'Your Site' :
                         site === 'admin' ? 'Admin Dashboard' : 
                         site.toUpperCase();
-        html += `<div class="task-category label">${siteName}</div>`;
+        const categoryId = `jesse-${site}`;
+        const isCollapsed = this.collapsedCategories.has(categoryId);
+        const chevron = isCollapsed ? '›' : '▾';
+        
+        html += `<div class="task-category label category-header" data-category-id="${categoryId}">
+          <span class="category-chevron">${chevron}</span>
+          ${siteName}
+        </div>`;
+        html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         bySite[site].forEach(task => {
           html += this.renderTaskItem(task);
         });
+        html += `</div>`;
       });
     }
     
     taskList.innerHTML = html || '<div style="color: var(--muted); padding: 20px; text-align: center;">No tasks found</div>';
+    
+    // Attach category collapse/expand handlers
+    document.querySelectorAll('.category-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        const categoryId = header.dataset.categoryId;
+        if (this.collapsedCategories.has(categoryId)) {
+          this.collapsedCategories.delete(categoryId);
+        } else {
+          this.collapsedCategories.add(categoryId);
+        }
+        this.renderTasks();
+      });
+    });
     
     // Attach click handlers
     document.querySelectorAll('.task-item').forEach(el => {

@@ -457,6 +457,35 @@ input[type="checkbox"] {
   margin-top: 0;
 }
 
+.category-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+
+.category-header:hover {
+  color: var(--accent);
+}
+
+.category-chevron {
+  font-size: 12px;
+  display: inline-block;
+  width: 12px;
+}
+
+.task-category-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.task-category-content.collapsed {
+  max-height: 0;
+  margin: 0;
+}
+
 .task-item {
   padding: 10px;
   margin-bottom: 6px;

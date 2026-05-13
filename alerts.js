@@ -221,35 +221,68 @@ class AlertSystem {
         setTimeout(() => this.renderAlertLog(), 100);
       });
     });
+    
+    // Attach undo button handlers
+    document.querySelectorAll('.alert-undo-action').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const alertId = e.target.dataset.alertId;
+        this.undoAlertAction(alertId);
+        setTimeout(() => this.renderAlertLog(), 100);
+      });
+    });
+  }
+  
+  undoAlertAction(alertId) {
+    const alert = this.alerts.find(a => a.id === alertId);
+    if (!alert) return;
+    
+    // If it was added to tasks, remove the task
+    if (alert.actionType === 'task') {
+      const taskToRemove = taskManager.tasks.find(t => 
+        t.title === alert.text && t.category === 'ALERTS'
+      );
+      if (taskToRemove) {
+        taskManager.tasks = taskManager.tasks.filter(t => t.id !== taskToRemove.id);
+        taskManager.saveTasks();
+        taskManager.renderTasks();
+      }
+    }
+    
+    // Reset alert to active state
+    alert.resolved = false;
+    alert.dismissed = false;
+    alert.actionType = null;
+    alert.sessionAction = false;
+    delete alert.resolvedAt;
+    delete alert.dismissedAt;
+    
+    this.saveAlerts();
+    this.updateAlertCount();
+    this.showNextAlert();
   }
   
   renderAlertItem(alert) {
-    const statusColors = {
-      'ACTIVE': 'color: var(--alert);',
-      'RESOLVED': 'color: #34d399;',
-      'CLEARED': 'color: var(--muted);',
-      'TASK LIST': 'color: #60a5fa;'
-    };
-    
-    // Determine status based on actionType
-    let status = 'ACTIVE';
-    if (alert.actionType === 'task') {
-      status = 'TASK LIST';
-    } else if (alert.actionType === 'resolved') {
-      status = 'RESOLVED';
-    } else if (alert.actionType === 'cleared') {
-      status = 'CLEARED';
-    }
+    const status = alert.actionType === 'task' ? 'TASK LIST' :
+                   alert.actionType === 'resolved' ? 'RESOLVED' :
+                   alert.actionType === 'cleared' ? 'CLEARED' : 'ACTIVE';
     
     const statusClass = alert.resolved || alert.dismissed ? 'resolved' : '';
     const severityBadge = alert.severity === 'error' ? 'badge-error' : 'badge-warning';
     const criticalLabel = alert.critical ? ' <span class="badge badge-error" style="margin-left: 4px;">CRITICAL</span>' : '';
     
+    // Active alerts get action buttons
     const actionsHtml = !alert.resolved && !alert.dismissed ? `
       <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 8px;">
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="addTask">Add to Tasks</button>
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="resolve">Resolved</button>
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Clear</button>
+      </div>
+    ` : '';
+    
+    // Actioned alerts get undo button
+    const undoHtml = (alert.resolved || alert.dismissed) && alert.sessionAction ? `
+      <div class="alert-log-actions" style="margin-top: 8px;">
+        <button class="btn-link alert-undo-action" data-alert-id="${alert.id}">Undo</button>
       </div>
     ` : '';
     
@@ -263,8 +296,9 @@ class AlertSystem {
           <div class="alert-log-meta">
             ${new Date(alert.timestamp).toLocaleString()} • ${alert.site}
           </div>
-          <div class="alert-log-status label" style="${statusColors[status]}">${status}</div>
+          <div class="alert-log-status label">${status}</div>
           ${actionsHtml}
+          ${undoHtml}
         </div>
       </div>
     `;
