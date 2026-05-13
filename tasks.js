@@ -98,21 +98,39 @@ class TaskManager {
     const taskList = document.getElementById('taskList');
     const filteredTasks = this.getFilteredTasks();
     
-    // Group by category
-    const grouped = {};
+    // Group by assignee first, then category
+    const byAssignee = { william: {}, jesse: {} };
+    
     filteredTasks.forEach(task => {
+      const assignee = task.assignee || 'jesse';
       const cat = task.category || 'Uncategorized';
-      if (!grouped[cat]) grouped[cat] = [];
-      grouped[cat].push(task);
+      if (!byAssignee[assignee][cat]) byAssignee[assignee][cat] = [];
+      byAssignee[assignee][cat].push(task);
     });
     
     let html = '';
-    Object.keys(grouped).forEach(category => {
-      html += `<div class="task-category label">${category.toUpperCase()}</div>`;
-      grouped[category].forEach(task => {
-        html += this.renderTaskItem(task);
+    
+    // William's tasks first
+    if (Object.keys(byAssignee.william).length > 0) {
+      html += `<div class="task-section-header">William</div>`;
+      Object.keys(byAssignee.william).forEach(category => {
+        html += `<div class="task-category label">${category.toUpperCase()}</div>`;
+        byAssignee.william[category].forEach(task => {
+          html += this.renderTaskItem(task);
+        });
       });
-    });
+    }
+    
+    // Jesse's tasks second
+    if (Object.keys(byAssignee.jesse).length > 0) {
+      html += `<div class="task-section-header">Jesse</div>`;
+      Object.keys(byAssignee.jesse).forEach(category => {
+        html += `<div class="task-category label">${category.toUpperCase()}</div>`;
+        byAssignee.jesse[category].forEach(task => {
+          html += this.renderTaskItem(task);
+        });
+      });
+    }
     
     taskList.innerHTML = html || '<div style="color: var(--muted); padding: 20px; text-align: center;">No tasks found</div>';
     
@@ -142,13 +160,13 @@ class TaskManager {
       `<span class="task-due ${dueClass}">Due: ${this.formatDate(task.dueDate)}</span>` : '';
     
     const subtasksHtml = task.subtasks && task.subtasks.length > 0 ?
-      `<span class="task-subtasks label">${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length}</span>` : '';
+      `<span class="label" style="color: var(--accent);">${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length}</span>` : '';
     
     const reminderHtml = task.reminder ?
-      `<span class="task-reminder label">Reminder: ${task.reminder}d</span>` : '';
+      `<span class="label" style="color: var(--accent);">Reminder: ${task.reminder}d</span>` : '';
     
-    const assigneeHtml = task.assignee ?
-      `<span class="task-assignee label">${task.assignee === 'william' ? 'William' : 'Jesse'}</span>` : '';
+    const priorityHtml = task.priority ?
+      `<span class="task-priority ${task.priority}">${task.priority.replace('-', ' ')}</span>` : '';
     
     return `
       <div class="task-item ${completedClass}" data-task-id="${task.id}">
@@ -156,7 +174,7 @@ class TaskManager {
         <div class="task-content">
           <div class="task-title">${task.title}</div>
           <div class="task-meta">
-            ${assigneeHtml}
+            ${priorityHtml}
             ${dueHtml}
             ${subtasksHtml}
             ${reminderHtml}
@@ -217,7 +235,9 @@ class TaskManager {
     document.getElementById('taskCategory').value = task ? task.category : '';
     document.getElementById('taskSite').value = task ? task.site : '';
     document.getElementById('taskDueDate').value = task ? task.dueDate : '';
+    document.getElementById('taskPriority').value = task ? task.priority : '';
     document.getElementById('taskReminder').value = task ? task.reminder : '';
+    document.getElementById('taskAssignee').value = task ? task.assignee : 'jesse';
     document.getElementById('taskDependencies').value = task ? task.dependencies : '';
     document.getElementById('taskNotes').value = task ? task.notes : '';
     
@@ -298,11 +318,12 @@ class TaskManager {
       category: document.getElementById('taskCategory').value.trim(),
       site: document.getElementById('taskSite').value,
       dueDate: document.getElementById('taskDueDate').value,
+      priority: document.getElementById('taskPriority').value,
       reminder: parseInt(document.getElementById('taskReminder').value) || null,
+      assignee: document.getElementById('taskAssignee').value,
       dependencies: document.getElementById('taskDependencies').value.trim(),
       notes: document.getElementById('taskNotes').value.trim(),
-      subtasks: subtasks,
-      assignee: 'jesse' // Default
+      subtasks: subtasks
     };
     
     if (this.currentTask) {

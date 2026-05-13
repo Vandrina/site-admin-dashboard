@@ -18,7 +18,7 @@
         <span class="alert-badge" id="alertCount">0</span>
         Alerts
       </button>
-      <button class="header-btn btn icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
+      <button class="header-btn btn" id="settingsBtn">Settings</button>
       <div class="user-badge">Jesse</div>
     </div>
   </header>
@@ -69,8 +69,7 @@
       <div class="task-sidebar-footer">
         <button class="btn btn-add" id="addTaskBtn">+ New Task</button>
         <div class="sidebar-actions">
-          <button class="icon-btn" id="exportTasksBtn" title="Export to text" aria-label="Export tasks">↓</button>
-          <button class="icon-btn" id="taskSettingsBtn" title="Settings" aria-label="Task settings">⚙</button>
+          <button class="btn-link" id="exportTasksBtn" title="Export to text">Export Tasks</button>
         </div>
       </div>
     </aside>
@@ -139,6 +138,19 @@
               <input type="date" id="taskDueDate">
             </div>
             <div class="form-group">
+              <label>Priority</label>
+              <select id="taskPriority">
+                <option value="">None</option>
+                <option value="urgent">Urgent</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+                <option value="nice-to-have">Nice to Have</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
               <label>Reminder</label>
               <select id="taskReminder">
                 <option value="">None</option>
@@ -147,6 +159,13 @@
                 <option value="30">30 days</option>
                 <option value="60">60 days (recurring)</option>
                 <option value="90">90 days (recurring)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Assigned To</label>
+              <select id="taskAssignee">
+                <option value="jesse">Jesse</option>
+                <option value="william">William</option>
               </select>
             </div>
           </div>
