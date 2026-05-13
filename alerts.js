@@ -21,6 +21,11 @@ class AlertSystem {
       this.openAlertLog();
     });
     
+    // View log button (full log page)
+    document.getElementById('viewAlertLog').addEventListener('click', () => {
+      this.openFullLog();
+    });
+    
     // Close alert log
     document.getElementById('closeAlertLog').addEventListener('click', () => {
       this.closeAlertLog();
@@ -45,6 +50,10 @@ class AlertSystem {
         this.closeAlertLog();
       }
     });
+  }
+  
+  openFullLog() {
+    alert('Alert Log\n\nComing soon:\n- Full alert history\n- Reverse chronological order\n- Unresolved at top\n- Status: Resolved, Cleared, Task List, Ignored\n- Color-coded status\n- Export to CSV');
   }
   
   showNextAlert() {
@@ -143,44 +152,42 @@ class AlertSystem {
   renderAlertLog() {
     const container = document.getElementById('alertLogList');
     
-    // Sort by timestamp (newest first)
-    const sorted = [...this.alerts].sort((a, b) => b.timestamp - a.timestamp);
+    // Sort by timestamp (newest first), then by status (active first)
+    const sorted = [...this.alerts].sort((a, b) => {
+      // Active/unresolved first
+      const aActive = !a.resolved && !a.dismissed;
+      const bActive = !b.resolved && !b.dismissed;
+      if (aActive !== bActive) return aActive ? -1 : 1;
+      
+      // Then by timestamp
+      return b.timestamp - a.timestamp;
+    });
     
     if (sorted.length === 0) {
-      container.innerHTML = '<div style="color: var(--muted); text-align: center; padding: 40px;">No alerts in log</div>';
+      container.innerHTML = '<div style="color: var(--muted); text-align: center; padding: 40px;">No alerts</div>';
       return;
     }
     
-    container.innerHTML = sorted.map(alert => {
-      const status = alert.resolved ? 'RESOLVED' : alert.dismissed ? 'DISMISSED' : 'ACTIVE';
-      const statusClass = alert.resolved || alert.dismissed ? 'resolved' : '';
-      const severityBadge = alert.severity === 'error' ? 'badge-error' : 'badge-warning';
-      const criticalLabel = alert.critical ? ' <span class="badge badge-error" style="margin-left: 4px;">CRITICAL</span>' : '';
-      
-      const actionsHtml = !alert.resolved && !alert.dismissed ? `
-        <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 8px;">
-          <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="addTask">Add to Tasks</button>
-          <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="resolve">Resolve</button>
-          <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Dismiss</button>
-        </div>
-      ` : '';
-      
-      return `
-        <div class="alert-log-item ${statusClass}">
-          <div class="alert-log-icon">
-            <span class="badge ${severityBadge}">${alert.severity.toUpperCase()}</span>
-          </div>
-          <div class="alert-log-content">
-            <div class="alert-log-text">${alert.text}${criticalLabel}</div>
-            <div class="alert-log-meta">
-              ${new Date(alert.timestamp).toLocaleString()} • ${alert.site}
-            </div>
-            <div class="alert-log-status label">${status}</div>
-            ${actionsHtml}
-          </div>
-        </div>
-      `;
-    }).join('');
+    // Separate active and snoozed
+    const active = sorted.filter(a => !a.resolved && !a.dismissed);
+    const snoozed = sorted.filter(a => a.resolved || a.dismissed);
+    
+    let html = '';
+    
+    // Active alerts
+    active.forEach(alert => {
+      html += this.renderAlertItem(alert);
+    });
+    
+    // Snoozed section
+    if (snoozed.length > 0) {
+      html += `<div class="alert-section-divider">Actioned</div>`;
+      snoozed.forEach(alert => {
+        html += this.renderAlertItem(alert);
+      });
+    }
+    
+    container.innerHTML = html;
     
     // Attach action button handlers
     document.querySelectorAll('.alert-log-action').forEach(btn => {
@@ -199,10 +206,49 @@ class AlertSystem {
           this.dismissAlert();
         }
         
-        // Re-render log after action
+        // Re-render after action
         setTimeout(() => this.renderAlertLog(), 100);
       });
     });
+  }
+  
+  renderAlertItem(alert) {
+    const statusColors = {
+      'ACTIVE': 'color: var(--alert);',
+      'RESOLVED': 'color: #34d399;',
+      'CLEARED': 'color: var(--muted);',
+      'TASK LIST': 'color: #60a5fa;',
+      'IGNORED': 'color: var(--muted);'
+    };
+    
+    const status = alert.resolved ? 'RESOLVED' : alert.dismissed ? 'CLEARED' : 'ACTIVE';
+    const statusClass = alert.resolved || alert.dismissed ? 'resolved' : '';
+    const severityBadge = alert.severity === 'error' ? 'badge-error' : 'badge-warning';
+    const criticalLabel = alert.critical ? ' <span class="badge badge-error" style="margin-left: 4px;">CRITICAL</span>' : '';
+    
+    const actionsHtml = !alert.resolved && !alert.dismissed ? `
+      <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 8px;">
+        <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="addTask">Add to Tasks</button>
+        <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="resolve">Resolved</button>
+        <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Clear</button>
+      </div>
+    ` : '';
+    
+    return `
+      <div class="alert-log-item ${statusClass}">
+        <div class="alert-log-icon">
+          <span class="badge ${severityBadge}">${alert.severity.toUpperCase()}</span>
+        </div>
+        <div class="alert-log-content">
+          <div class="alert-log-text">${alert.text}${criticalLabel}</div>
+          <div class="alert-log-meta">
+            ${new Date(alert.timestamp).toLocaleString()} • ${alert.site}
+          </div>
+          <div class="alert-log-status label" style="${statusColors[status]}">${status}</div>
+          ${actionsHtml}
+        </div>
+      </div>
+    `;
   }
   
   saveAlerts() {

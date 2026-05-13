@@ -29,7 +29,7 @@
       <span class="alert-text" id="alertText"></span>
       <div class="alert-actions">
         <button class="alert-btn btn" id="alertAddTask">Add to Tasks</button>
-        <button class="alert-btn btn" id="alertResolve">Resolve</button>
+        <button class="alert-btn btn" id="alertResolve">Resolved</button>
         <button class="alert-btn-clear btn-secondary" id="alertDismiss">Clear</button>
       </div>
     </div>
@@ -97,16 +97,19 @@
 
   </div>
 
-  <!-- Alert Log Modal -->
+  <!-- Alert Modal -->
   <div class="modal" id="alertLogModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Alert Log</h2>
-        <button class="modal-close" id="closeAlertLog" aria-label="Close">×</button>
+        <h2>Alerts</h2>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button class="btn-link" id="viewAlertLog">View Log</button>
+          <button class="modal-close" id="closeAlertLog" aria-label="Close">×</button>
+        </div>
       </div>
       <div class="modal-body">
         <div class="alert-log-list" id="alertLogList">
-          <!-- Alert log items -->
+          <!-- Alert items -->
         </div>
       </div>
     </div>
