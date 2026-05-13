@@ -126,7 +126,7 @@ class TaskManager {
     const taskList = document.getElementById('taskList');
     const filteredTasks = this.getFilteredTasks();
     
-    // Group by assignee first, then category
+    // Group by assignee first
     const byAssignee = { william: {}, jesse: {} };
     
     filteredTasks.forEach(task => {
@@ -148,7 +148,7 @@ class TaskManager {
     
     let html = '';
     
-    // William's tasks first
+    // William's tasks first (unchanged)
     if (Object.keys(byAssignee.william).length > 0) {
       html += `<div class="task-section-header">William</div>`;
       Object.keys(byAssignee.william).forEach(category => {
@@ -159,15 +159,57 @@ class TaskManager {
       });
     }
     
-    // Simple divider before Jesse's section
+    // Jesse's tasks - reorganized
     if (Object.keys(byAssignee.jesse).length > 0) {
       if (Object.keys(byAssignee.william).length > 0) {
         html += `<div class="task-section-divider"></div>`;
       }
       html += `<div class="task-section-header">Jesse</div>`;
+      
+      // ALERTS category always first
+      if (byAssignee.jesse['ALERTS']) {
+        html += `<div class="task-category label">ALERTS</div>`;
+        byAssignee.jesse['ALERTS'].forEach(task => {
+          html += this.renderTaskItem(task);
+        });
+      }
+      
+      // Group remaining tasks by priority and site
+      const jesseTasks = [];
       Object.keys(byAssignee.jesse).forEach(category => {
-        html += `<div class="task-category label">${category.toUpperCase()}</div>`;
-        byAssignee.jesse[category].forEach(task => {
+        if (category !== 'ALERTS') {
+          jesseTasks.push(...byAssignee.jesse[category]);
+        }
+      });
+      
+      // Separate urgent from non-urgent
+      const urgentTasks = jesseTasks.filter(t => t.priority === 'urgent');
+      const nonUrgentTasks = jesseTasks.filter(t => t.priority !== 'urgent');
+      
+      // Urgent section (with site tags)
+      if (urgentTasks.length > 0) {
+        html += `<div class="task-category label">URGENT</div>`;
+        urgentTasks.forEach(task => {
+          html += this.renderTaskItem(task, true); // true = show site tag
+        });
+      }
+      
+      // Group non-urgent by site
+      const bySite = {};
+      nonUrgentTasks.forEach(task => {
+        const site = task.site || 'general';
+        if (!bySite[site]) bySite[site] = [];
+        bySite[site].push(task);
+      });
+      
+      // Render by site
+      Object.keys(bySite).forEach(site => {
+        const siteName = site === 'william' ? "William's Portfolio" : 
+                        site === 'yoursite' ? 'Your Site' :
+                        site === 'admin' ? 'Admin Dashboard' : 
+                        site.toUpperCase();
+        html += `<div class="task-category label">${siteName}</div>`;
+        bySite[site].forEach(task => {
           html += this.renderTaskItem(task);
         });
       });
@@ -192,7 +234,7 @@ class TaskManager {
     });
   }
   
-  renderTaskItem(task) {
+  renderTaskItem(task, showSiteTag = false) {
     const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
     const dueClass = isOverdue ? 'overdue' : '';
     const completedClass = task.completed ? 'completed' : '';
@@ -209,12 +251,17 @@ class TaskManager {
     const priorityHtml = task.priority ?
       `<span class="task-priority ${task.priority}">${task.priority.replace('-', ' ')}</span>` : '';
     
+    // Site tag for urgent tasks
+    const siteTagHtml = showSiteTag && task.site ? 
+      `<span class="task-site-tag label" style="color: var(--accent);">${task.site === 'william' ? 'WP' : task.site === 'yoursite' ? 'YS' : task.site === 'admin' ? 'AD' : task.site.toUpperCase()}</span>` : '';
+    
     return `
       <div class="task-item ${completedClass}" data-task-id="${task.id}">
         <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} aria-label="Mark task complete">
         <div class="task-content">
           <div class="task-title">${task.title}</div>
           <div class="task-meta">
+            ${siteTagHtml}
             ${priorityHtml}
             ${dueHtml}
             ${subtasksHtml}

@@ -32,7 +32,12 @@ class Dashboard {
   renderSites() {
     const grid = document.getElementById('sitesGrid');
     
-    grid.innerHTML = this.sites.map(site => `
+    // Separate admin from other sites
+    const regularSites = this.sites.filter(s => s.id !== 'admin');
+    const adminSite = this.sites.find(s => s.id === 'admin');
+    const orderedSites = [...regularSites, ...(adminSite ? [adminSite] : [])];
+    
+    grid.innerHTML = orderedSites.map(site => `
       <div class="site-card card" data-site-id="${site.id}">
         <div class="site-card-header">
           <h3 class="site-name">${site.name}</h3>

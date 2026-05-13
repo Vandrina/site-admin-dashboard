@@ -102,8 +102,15 @@ class AlertSystem {
     taskManager.saveTasks();
     taskManager.renderTasks();
     
-    // Mark alert as dismissed
-    this.dismissAlert();
+    // Mark alert with action type
+    alert.actionType = 'task';
+    alert.dismissed = true;
+    alert.dismissedAt = Date.now();
+    alert.sessionAction = true; // For showing in current session only
+    
+    this.saveAlerts();
+    this.updateAlertCount();
+    this.showNextAlert();
   }
   
   resolveAlert() {
@@ -111,8 +118,10 @@ class AlertSystem {
     
     const alert = this.alerts.find(a => a.id === this.currentAlert);
     if (alert) {
+      alert.actionType = 'resolved';
       alert.resolved = true;
       alert.resolvedAt = Date.now();
+      alert.sessionAction = true; // For showing in current session only
       this.saveAlerts();
       this.updateAlertCount();
       this.showNextAlert();
@@ -124,8 +133,10 @@ class AlertSystem {
     
     const alert = this.alerts.find(a => a.id === this.currentAlert);
     if (alert) {
+      alert.actionType = 'cleared';
       alert.dismissed = true;
       alert.dismissedAt = Date.now();
+      alert.sessionAction = true; // For showing in current session only
       this.saveAlerts();
       this.updateAlertCount();
       this.showNextAlert();
@@ -168,9 +179,9 @@ class AlertSystem {
       return;
     }
     
-    // Separate active and snoozed
+    // Separate active and actioned (only show session actions)
     const active = sorted.filter(a => !a.resolved && !a.dismissed);
-    const snoozed = sorted.filter(a => a.resolved || a.dismissed);
+    const actioned = sorted.filter(a => (a.resolved || a.dismissed) && a.sessionAction);
     
     let html = '';
     
@@ -179,10 +190,10 @@ class AlertSystem {
       html += this.renderAlertItem(alert);
     });
     
-    // Snoozed section
-    if (snoozed.length > 0) {
-      html += `<div class="alert-section-divider">Actioned</div>`;
-      snoozed.forEach(alert => {
+    // Actioned section (current session only)
+    if (actioned.length > 0) {
+      html += `<div class="alert-section-divider">Actioned (This Session)</div>`;
+      actioned.forEach(alert => {
         html += this.renderAlertItem(alert);
       });
     }
@@ -217,11 +228,19 @@ class AlertSystem {
       'ACTIVE': 'color: var(--alert);',
       'RESOLVED': 'color: #34d399;',
       'CLEARED': 'color: var(--muted);',
-      'TASK LIST': 'color: #60a5fa;',
-      'IGNORED': 'color: var(--muted);'
+      'TASK LIST': 'color: #60a5fa;'
     };
     
-    const status = alert.resolved ? 'RESOLVED' : alert.dismissed ? 'CLEARED' : 'ACTIVE';
+    // Determine status based on actionType
+    let status = 'ACTIVE';
+    if (alert.actionType === 'task') {
+      status = 'TASK LIST';
+    } else if (alert.actionType === 'resolved') {
+      status = 'RESOLVED';
+    } else if (alert.actionType === 'cleared') {
+      status = 'CLEARED';
+    }
+    
     const statusClass = alert.resolved || alert.dismissed ? 'resolved' : '';
     const severityBadge = alert.severity === 'error' ? 'badge-error' : 'badge-warning';
     const criticalLabel = alert.critical ? ' <span class="badge badge-error" style="margin-left: 4px;">CRITICAL</span>' : '';

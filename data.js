@@ -24,6 +24,17 @@ const SITES_DATA = [
     views: 450,
     speed: 89,
     alerts: 3
+  },
+  {
+    id: 'admin',
+    name: 'Admin Dashboard',
+    url: 'admin.yourdomain.com',
+    status: 'up',
+    uptime: '100%',
+    ssl_days: 90,
+    views: 0,
+    speed: 0,
+    alerts: 0
   }
 ];
 
