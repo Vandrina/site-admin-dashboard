@@ -12,7 +12,7 @@ class TaskManager {
       william: false,
       yoursite: false,
       overdue: false,
-      showCompleted: true
+      hideCompleted: false
     };
     
     this.init();
@@ -30,9 +30,9 @@ class TaskManager {
       filters.style.display = filters.style.display === 'none' ? 'block' : 'none';
     });
     
-    // Show/hide completed toggle
-    document.getElementById('showCompletedToggle').addEventListener('change', (e) => {
-      this.filters.showCompleted = e.target.checked;
+    // Hide completed toggle
+    document.getElementById('hideCompletedToggle').addEventListener('change', (e) => {
+      this.filters.hideCompleted = e.target.checked;
       this.renderTasks();
     });
     
@@ -228,8 +228,8 @@ class TaskManager {
   getFilteredTasks() {
     let filtered = [...this.tasks];
     
-    // Show/hide completed
-    if (!this.filters.showCompleted) {
+    // Hide completed
+    if (this.filters.hideCompleted) {
       filtered = filtered.filter(t => !t.completed);
     }
     

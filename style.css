@@ -241,7 +241,6 @@ input[type="checkbox"] {
   max-width: 1200px;
   margin: 0 auto;
   padding: 14px 24px;
-  margin: 0 32px;
   background: var(--alert-bg);
   border: 1px solid var(--accent);
   border-top: none;
@@ -439,8 +438,8 @@ input[type="checkbox"] {
 }
 
 .task-section-divider {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
   margin: 24px 0 20px 0;
   height: 8px;
 }
@@ -819,14 +818,39 @@ input[type="checkbox"] {
   }
   
   .task-sidebar {
-    width: 100%;
-    max-height: none;
+    width: calc(100% - 40px);
+    max-width: 100%;
+    max-height: 400px;
     position: relative;
-    margin: 20px;
+    margin: 20px 20px 0 20px;
+    order: 2;
   }
   
   .dashboard-main {
     padding: 20px;
+    order: 1;
+  }
+  
+  /* Alert buttons on second row */
+  .alert-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .alert-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Task controls stacked */
+  .task-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .task-controls .btn-add {
+    width: 100%;
   }
 }
 
