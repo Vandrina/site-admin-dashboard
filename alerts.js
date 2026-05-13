@@ -278,7 +278,7 @@ class AlertSystem {
     
     const statusClass = alert.resolved || alert.dismissed ? 'resolved' : '';
     const severityBadge = alert.severity === 'error' ? 'badge-error' : 'badge-warning';
-    const criticalLabel = alert.critical ? ' <span class="badge badge-error" style="margin-left: 4px;">CRITICAL</span>' : '';
+    const criticalLabel = alert.critical ? `<span class="badge badge-error alert-critical-badge">CRITICAL</span>` : '';
     
     // Active alerts get action buttons
     const actionsHtml = !alert.resolved && !alert.dismissed ? `
@@ -302,7 +302,10 @@ class AlertSystem {
           <span class="badge ${severityBadge}">${alert.severity.toUpperCase()}</span>
         </div>
         <div class="alert-log-content">
-          <div class="alert-log-text">${alert.text}${criticalLabel}</div>
+          <div class="alert-log-header">
+            <div class="alert-log-text">${alert.text}</div>
+            ${criticalLabel}
+          </div>
           <div class="alert-log-meta">
             ${new Date(alert.timestamp).toLocaleString()} • ${alert.site}
           </div>
