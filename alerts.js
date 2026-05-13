@@ -31,7 +31,7 @@ class AlertSystem {
       this.closeAlertLog();
     });
     
-    // Alert actions
+    // Alert banner actions
     document.getElementById('alertAddTask').addEventListener('click', () => {
       this.addAlertToTasks();
     });
@@ -40,7 +40,11 @@ class AlertSystem {
       this.resolveAlert();
     });
     
-    document.getElementById('alertDismiss').addEventListener('click', () => {
+    document.getElementById('alertHide').addEventListener('click', () => {
+      this.hideAlert();
+    });
+    
+    document.getElementById('alertDismissBanner').addEventListener('click', () => {
       this.dismissAlert();
     });
     
@@ -50,6 +54,12 @@ class AlertSystem {
         this.closeAlertLog();
       }
     });
+  }
+  
+  hideAlert() {
+    // Just hide the banner, alert stays in list
+    this.currentAlert = null;
+    this.showNextAlert();
   }
   
   openFullLog() {
@@ -272,10 +282,10 @@ class AlertSystem {
     
     // Active alerts get action buttons
     const actionsHtml = !alert.resolved && !alert.dismissed ? `
-      <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 8px;">
+      <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 12px;">
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="addTask">Add to Tasks</button>
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="resolve">Resolved</button>
-        <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Clear</button>
+        <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Dismiss</button>
       </div>
     ` : '';
     

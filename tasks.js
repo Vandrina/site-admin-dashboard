@@ -156,10 +156,14 @@ class TaskManager {
         const categoryId = `william-${category}`;
         const isCollapsed = this.collapsedCategories.has(categoryId);
         const chevron = isCollapsed ? '›' : '▾';
+        const incompleteCount = byAssignee.william[category].filter(t => !t.completed).length;
+        const countBadge = isCollapsed && incompleteCount > 0 ? 
+          `<span class="category-count">${incompleteCount}</span>` : '';
         
         html += `<div class="task-category label category-header" data-category-id="${categoryId}">
           <span class="category-chevron">${chevron}</span>
           ${category.toUpperCase()}
+          ${countBadge}
         </div>`;
         html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         byAssignee.william[category].forEach(task => {
@@ -181,10 +185,14 @@ class TaskManager {
         const categoryId = 'jesse-ALERTS';
         const isCollapsed = this.collapsedCategories.has(categoryId);
         const chevron = isCollapsed ? '›' : '▾';
+        const incompleteCount = byAssignee.jesse['ALERTS'].filter(t => !t.completed).length;
+        const countBadge = isCollapsed && incompleteCount > 0 ? 
+          `<span class="category-count">${incompleteCount}</span>` : '';
         
         html += `<div class="task-category label category-header" data-category-id="${categoryId}">
           <span class="category-chevron">${chevron}</span>
           ALERTS
+          ${countBadge}
         </div>`;
         html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         byAssignee.jesse['ALERTS'].forEach(task => {
@@ -210,10 +218,14 @@ class TaskManager {
         const categoryId = 'jesse-URGENT';
         const isCollapsed = this.collapsedCategories.has(categoryId);
         const chevron = isCollapsed ? '›' : '▾';
+        const incompleteCount = urgentTasks.filter(t => !t.completed).length;
+        const countBadge = isCollapsed && incompleteCount > 0 ? 
+          `<span class="category-count">${incompleteCount}</span>` : '';
         
         html += `<div class="task-category label category-header" data-category-id="${categoryId}">
           <span class="category-chevron">${chevron}</span>
           URGENT
+          ${countBadge}
         </div>`;
         html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         urgentTasks.forEach(task => {
@@ -239,10 +251,14 @@ class TaskManager {
         const categoryId = `jesse-${site}`;
         const isCollapsed = this.collapsedCategories.has(categoryId);
         const chevron = isCollapsed ? '›' : '▾';
+        const incompleteCount = bySite[site].filter(t => !t.completed).length;
+        const countBadge = isCollapsed && incompleteCount > 0 ? 
+          `<span class="category-count">${incompleteCount}</span>` : '';
         
         html += `<div class="task-category label category-header" data-category-id="${categoryId}">
           <span class="category-chevron">${chevron}</span>
           ${siteName}
+          ${countBadge}
         </div>`;
         html += `<div class="task-category-content ${isCollapsed ? 'collapsed' : ''}" data-category-id="${categoryId}">`;
         bySite[site].forEach(task => {
