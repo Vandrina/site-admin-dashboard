@@ -154,20 +154,55 @@ class AlertSystem {
     container.innerHTML = sorted.map(alert => {
       const status = alert.resolved ? 'RESOLVED' : alert.dismissed ? 'DISMISSED' : 'ACTIVE';
       const statusClass = alert.resolved || alert.dismissed ? 'resolved' : '';
+      const severityBadge = alert.severity === 'error' ? 'badge-error' : 'badge-warning';
+      const criticalLabel = alert.critical ? ' <span class="badge badge-error" style="margin-left: 4px;">CRITICAL</span>' : '';
+      
+      const actionsHtml = !alert.resolved && !alert.dismissed ? `
+        <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 8px;">
+          <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="addTask">Add to Tasks</button>
+          <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="resolve">Resolve</button>
+          <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Dismiss</button>
+        </div>
+      ` : '';
       
       return `
         <div class="alert-log-item ${statusClass}">
-          <div class="alert-log-icon">${alert.severity === 'error' ? '🔴' : '⚠️'}</div>
+          <div class="alert-log-icon">
+            <span class="badge ${severityBadge}">${alert.severity.toUpperCase()}</span>
+          </div>
           <div class="alert-log-content">
-            <div class="alert-log-text">${alert.text}</div>
+            <div class="alert-log-text">${alert.text}${criticalLabel}</div>
             <div class="alert-log-meta">
               ${new Date(alert.timestamp).toLocaleString()} • ${alert.site}
             </div>
-            <div class="alert-log-status">${status}</div>
+            <div class="alert-log-status label">${status}</div>
+            ${actionsHtml}
           </div>
         </div>
       `;
     }).join('');
+    
+    // Attach action button handlers
+    document.querySelectorAll('.alert-log-action').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const alertId = e.target.dataset.alertId;
+        const action = e.target.dataset.action;
+        
+        if (action === 'addTask') {
+          this.currentAlert = alertId;
+          this.addAlertToTasks();
+        } else if (action === 'resolve') {
+          this.currentAlert = alertId;
+          this.resolveAlert();
+        } else if (action === 'dismiss') {
+          this.currentAlert = alertId;
+          this.dismissAlert();
+        }
+        
+        // Re-render log after action
+        setTimeout(() => this.renderAlertLog(), 100);
+      });
+    });
   }
   
   saveAlerts() {

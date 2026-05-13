@@ -42,12 +42,193 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   ALERT BANNER
+   UNIVERSAL COMPONENTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Universal Buttons ── */
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  background: transparent;
+}
+
+.btn {
+  background: var(--bg-3);
+  border: 1px solid var(--border-mid);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--border-mid);
+  color: var(--muted);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.btn-add {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--border-mid);
+  color: var(--accent);
+}
+
+.btn-add:hover {
+  border-color: var(--accent);
+  background: var(--alert-bg);
+}
+
+.btn-link {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  padding: 4px 0;
+  text-align: left;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  padding: 4px;
+}
+
+.icon-btn:hover {
+  color: var(--accent);
+}
+
+/* ── Universal Cards ── */
+.card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* ── Universal Headers ── */
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── Universal Labels ── */
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── Universal Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.badge-warning {
+  background: var(--alert-bg);
+  color: var(--alert);
+  border: 1px solid var(--accent);
+}
+
+.badge-error {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.badge-info {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+/* ── Universal Form Elements ── */
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  background: var(--bg-3);
+  border: 1px solid var(--border-mid);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: var(--font-body);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ALERT BANNER (Below Header)
    ══════════════════════════════════════════════════════════════ */
 .alert-banner {
   background: var(--alert-bg);
   border-bottom: 1px solid var(--accent);
-  padding: 12px 24px;
+  padding: 14px 24px;
   display: none;
 }
 
@@ -61,16 +242,14 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-.alert-icon {
-  font-size: 18px;
+  justify-content: space-between;
 }
 
 .alert-text {
   flex: 1;
   color: var(--bright);
   font-size: 14px;
+  font-weight: 500;
 }
 
 .alert-actions {
@@ -79,20 +258,11 @@ body {
 }
 
 .alert-btn {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
+  /* Uses universal .btn + specific overrides */
   padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 12px;
-  font-family: var(--font-body);
-  transition: all 0.2s;
-}
-
-.alert-btn:hover {
-  background: var(--accent);
-  color: var(--bg);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .alert-btn-clear {
@@ -103,6 +273,7 @@ body {
 .alert-btn-clear:hover {
   background: var(--bg-3);
   color: var(--text);
+  border-color: var(--text);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -135,21 +306,9 @@ body {
 }
 
 .header-btn {
-  background: transparent;
-  border: 1px solid var(--border-mid);
-  color: var(--text);
+  /* Uses universal .btn + specific overrides */
   padding: 8px 12px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 14px;
-  font-family: var(--font-body);
-  transition: all 0.2s;
   position: relative;
-}
-
-.header-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 .alert-badge {
@@ -227,26 +386,7 @@ body {
 }
 
 .sidebar-title {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-.icon-btn {
-  background: transparent;
-  border: none;
-  color: var(--text);
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
-  transition: color 0.2s;
-}
-
-.icon-btn:hover {
-  color: var(--accent);
+  /* Uses .section-title universal */
 }
 
 .task-filters {
@@ -256,20 +396,8 @@ body {
 }
 
 .task-search {
-  width: 100%;
-  background: var(--bg-3);
-  border: 1px solid var(--border-mid);
-  color: var(--text);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: var(--font-body);
+  /* Uses universal input styles */
   margin-bottom: 12px;
-}
-
-.task-search:focus {
-  outline: none;
-  border-color: var(--accent);
 }
 
 .filter-group {
@@ -287,10 +415,6 @@ body {
   cursor: pointer;
 }
 
-.filter-label input[type="checkbox"] {
-  accent-color: var(--accent);
-}
-
 .task-list {
   flex: 1;
   overflow-y: auto;
@@ -298,11 +422,7 @@ body {
 }
 
 .task-category {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  /* Uses .label universal + specific margins */
   margin: 20px 0 8px 0;
 }
 
@@ -371,15 +491,11 @@ body {
   color: var(--alert);
 }
 
-.task-subtasks {
+.task-subtasks,
+.task-reminder,
+.task-assignee {
+  /* Uses .label universal style */
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 10px;
-}
-
-.task-reminder {
-  color: var(--accent);
-  font-size: 10px;
 }
 
 .task-sidebar-footer {
@@ -455,11 +571,7 @@ body {
 }
 
 .stat-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  /* Uses .label universal */
 }
 
 .stat-value {
@@ -486,77 +598,11 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   BUTTONS
+   BUTTON MODIFIERS (Specific Use Cases)
    ══════════════════════════════════════════════════════════════ */
-.btn {
-  background: var(--bg-3);
-  border: 1px solid var(--border-mid);
-  color: var(--text);
-  padding: 10px 20px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 14px;
-  font-family: var(--font-body);
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
-}
-
-.btn-primary:hover {
-  background: var(--accent-dim);
-  border-color: var(--accent-dim);
-}
-
-.btn-secondary {
-  background: transparent;
-  border-color: var(--border-mid);
-  color: var(--muted);
-}
-
-.btn-secondary:hover {
-  border-color: var(--text);
-  color: var(--text);
-}
-
-.btn-add {
-  width: 100%;
-  background: transparent;
-  border: 1px dashed var(--border-mid);
-  color: var(--accent);
-}
-
-.btn-add:hover {
-  border-color: var(--accent);
-  background: var(--alert-bg);
-}
-
 .btn-add-site {
   width: 100%;
   max-width: 400px;
-}
-
-.btn-link {
-  background: transparent;
-  border: none;
-  color: var(--accent);
-  font-size: 13px;
-  cursor: pointer;
-  padding: 4px 0;
-  text-align: left;
-}
-
-.btn-link:hover {
-  text-decoration: underline;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -637,7 +683,7 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   FORMS
+   FORMS (Specific Layouts)
    ══════════════════════════════════════════════════════════════ */
 .form-group {
   margin-bottom: 20px;
@@ -651,27 +697,6 @@ body {
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-
-.form-group input[type="text"],
-.form-group input[type="date"],
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  background: var(--bg-3);
-  border: 1px solid var(--border-mid);
-  color: var(--text);
-  padding: 10px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: var(--font-body);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--accent);
 }
 
 .form-row {

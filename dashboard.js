@@ -36,34 +36,36 @@ class Dashboard {
       <div class="site-card" data-site-id="${site.id}">
         <div class="site-card-header">
           <h3 class="site-name">${site.name}</h3>
-          <span class="site-status">${site.status === 'up' ? '✅' : '❌'}</span>
+          <span class="badge ${site.status === 'up' ? 'badge-success' : 'badge-error'}">
+            ${site.status.toUpperCase()}
+          </span>
         </div>
         
         <div class="site-stats">
           <div class="site-stat">
-            <div class="stat-label">Uptime</div>
+            <div class="stat-label label">Uptime</div>
             <div class="stat-value">${site.uptime}</div>
           </div>
           
           <div class="site-stat">
-            <div class="stat-label">SSL Cert</div>
+            <div class="stat-label label">SSL Cert</div>
             <div class="stat-value ${site.ssl_days < 14 ? 'warning' : ''}">${site.ssl_days}d</div>
           </div>
           
           <div class="site-stat">
-            <div class="stat-label">Views</div>
+            <div class="stat-label label">Views</div>
             <div class="stat-value">${this.formatNumber(site.views)}</div>
           </div>
           
           <div class="site-stat">
-            <div class="stat-label">Speed</div>
+            <div class="stat-label label">Speed</div>
             <div class="stat-value">${site.speed}</div>
           </div>
         </div>
         
         ${site.alerts > 0 ? `
           <div class="site-alerts">
-            ⚠️ ${site.alerts} alert${site.alerts > 1 ? 's' : ''} requiring attention
+            ${site.alerts} alert${site.alerts > 1 ? 's' : ''} requiring attention
           </div>
         ` : ''}
       </div>

@@ -333,6 +333,7 @@ const ALERTS_DATA = [
     text: "William's site SSL certificate expires in 7 days",
     site: 'william',
     severity: 'warning',
+    critical: true,
     timestamp: Date.now() - 3600000,
     resolved: false,
     dismissed: false
@@ -342,6 +343,7 @@ const ALERTS_DATA = [
     text: '1 broken image found in gallery manifest check',
     site: 'william',
     severity: 'warning',
+    critical: false,
     timestamp: Date.now() - 7200000,
     resolved: false,
     dismissed: false
@@ -351,6 +353,7 @@ const ALERTS_DATA = [
     text: 'Your site has 3 JS errors in the past hour',
     site: 'yoursite',
     severity: 'error',
+    critical: true,
     timestamp: Date.now() - 1800000,
     resolved: false,
     dismissed: false

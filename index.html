@@ -8,45 +8,44 @@
 </head>
 <body>
   
-  <!-- Alert Banner -->
-  <div class="alert-banner" id="alertBanner">
-    <div class="alert-content">
-      <span class="alert-icon">⚠️</span>
-      <span class="alert-text" id="alertText"></span>
-      <div class="alert-actions">
-        <button class="alert-btn" id="alertAddTask">Add to Tasks</button>
-        <button class="alert-btn" id="alertResolve">Resolve</button>
-        <button class="alert-btn alert-btn-clear" id="alertDismiss">Clear</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Header -->
   <header class="dashboard-header">
     <div class="header-left">
-      <h1 class="dashboard-title">🏠 Site Admin Dashboard</h1>
+      <h1 class="dashboard-title">Site Admin Dashboard</h1>
     </div>
     <div class="header-right">
-      <button class="header-btn" id="alertLogBtn">
+      <button class="header-btn btn" id="alertLogBtn">
         <span class="alert-badge" id="alertCount">0</span>
-        🔔 Alerts
+        Alerts
       </button>
-      <button class="header-btn" id="settingsBtn">⚙️</button>
+      <button class="header-btn btn icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
       <div class="user-badge">Jesse</div>
     </div>
   </header>
+
+  <!-- Alert Banner (below header) -->
+  <div class="alert-banner" id="alertBanner">
+    <div class="alert-content">
+      <span class="alert-text" id="alertText"></span>
+      <div class="alert-actions">
+        <button class="alert-btn btn" id="alertAddTask">Add to Tasks</button>
+        <button class="alert-btn btn" id="alertResolve">Resolve</button>
+        <button class="alert-btn-clear btn-secondary" id="alertDismiss">Clear</button>
+      </div>
+    </div>
+  </div>
 
   <div class="dashboard-container">
     
     <!-- Task Sidebar -->
     <aside class="task-sidebar card">
       <div class="task-sidebar-header">
-        <h2 class="sidebar-title">TASKS</h2>
-        <button class="icon-btn" id="taskFilterBtn">🔍</button>
+        <h2 class="sidebar-title section-title">TASKS</h2>
+        <button class="icon-btn" id="taskFilterBtn" aria-label="Filter tasks">⌕</button>
       </div>
 
       <div class="task-filters" id="taskFilters" style="display: none;">
-        <input type="text" class="task-search" placeholder="Search tasks..." id="taskSearch">
+        <input type="text" class="task-search" placeholder="Search tasks..." id="taskSearch" aria-label="Search tasks">
         <div class="filter-group">
           <label class="filter-label">
             <input type="checkbox" checked id="filterAllSites"> All Sites
@@ -70,8 +69,8 @@
       <div class="task-sidebar-footer">
         <button class="btn btn-add" id="addTaskBtn">+ New Task</button>
         <div class="sidebar-actions">
-          <button class="icon-btn" id="exportTasksBtn" title="Export to text">📤</button>
-          <button class="icon-btn" id="taskSettingsBtn" title="Settings">⚙️</button>
+          <button class="icon-btn" id="exportTasksBtn" title="Export to text" aria-label="Export tasks">↓</button>
+          <button class="icon-btn" id="taskSettingsBtn" title="Settings" aria-label="Task settings">⚙</button>
         </div>
       </div>
     </aside>
@@ -95,7 +94,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>Alert Log</h2>
-        <button class="modal-close" id="closeAlertLog">✕</button>
+        <button class="modal-close" id="closeAlertLog" aria-label="Close">×</button>
       </div>
       <div class="modal-body">
         <div class="alert-log-list" id="alertLogList">
@@ -110,7 +109,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="taskModalTitle">Task Details</h2>
-        <button class="modal-close" id="closeTaskModal">✕</button>
+        <button class="modal-close" id="closeTaskModal" aria-label="Close">×</button>
       </div>
       <div class="modal-body">
         <form id="taskForm">

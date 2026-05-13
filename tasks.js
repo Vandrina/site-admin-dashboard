@@ -108,7 +108,7 @@ class TaskManager {
     
     let html = '';
     Object.keys(grouped).forEach(category => {
-      html += `<div class="task-category">## ${category.toUpperCase()}</div>`;
+      html += `<div class="task-category label">${category.toUpperCase()}</div>`;
       grouped[category].forEach(task => {
         html += this.renderTaskItem(task);
       });
@@ -139,20 +139,24 @@ class TaskManager {
     const completedClass = task.completed ? 'completed' : '';
     
     const dueHtml = task.dueDate ? 
-      `<span class="task-due ${dueClass}">📅 ${this.formatDate(task.dueDate)}</span>` : '';
+      `<span class="task-due ${dueClass}">Due: ${this.formatDate(task.dueDate)}</span>` : '';
     
     const subtasksHtml = task.subtasks && task.subtasks.length > 0 ?
-      `<span class="task-subtasks">${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length}</span>` : '';
+      `<span class="task-subtasks label">${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length}</span>` : '';
     
     const reminderHtml = task.reminder ?
-      `<span class="task-reminder">🔔 ${task.reminder}d</span>` : '';
+      `<span class="task-reminder label">Reminder: ${task.reminder}d</span>` : '';
+    
+    const assigneeHtml = task.assignee ?
+      `<span class="task-assignee label">${task.assignee === 'william' ? 'William' : 'Jesse'}</span>` : '';
     
     return `
       <div class="task-item ${completedClass}" data-task-id="${task.id}">
-        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
+        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} aria-label="Mark task complete">
         <div class="task-content">
           <div class="task-title">${task.title}</div>
           <div class="task-meta">
+            ${assigneeHtml}
             ${dueHtml}
             ${subtasksHtml}
             ${reminderHtml}
