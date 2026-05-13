@@ -282,7 +282,7 @@ class AlertSystem {
     
     // Active alerts get action buttons
     const actionsHtml = !alert.resolved && !alert.dismissed ? `
-      <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 12px;">
+      <div class="alert-log-actions" style="margin-top: 8px; display: flex; gap: 16px;">
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="addTask">Add to Tasks</button>
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="resolve">Resolved</button>
         <button class="btn-link alert-log-action" data-alert-id="${alert.id}" data-action="dismiss">Dismiss</button>
