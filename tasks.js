@@ -132,7 +132,7 @@ class TaskManager {
     
     filteredTasks.forEach(task => {
       const assignee = task.assignee || 'jesse';
-      const cat = task.category || 'Uncategorized';
+      const cat = task.category || 'General';
       if (!byAssignee[assignee][cat]) byAssignee[assignee][cat] = [];
       byAssignee[assignee][cat].push(task);
     });
@@ -432,7 +432,7 @@ class TaskManager {
       <div class="form-group" style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
         <input type="checkbox" ${sub.completed ? 'checked' : ''} data-subtask-index="${i}">
         <input type="text" value="${sub.title}" data-subtask-index="${i}" style="flex: 1;">
-        <button type="button" class="icon-btn" data-remove-subtask="${i}">🗑️</button>
+        <button type="button" class="icon-btn" data-remove-subtask="${i}" style="font-size: 20px; color: var(--muted);">×</button>
       </div>
     `).join('');
     
@@ -458,7 +458,7 @@ class TaskManager {
     div.innerHTML = `
       <input type="checkbox" data-subtask-index="${index}">
       <input type="text" placeholder="New subtask" data-subtask-index="${index}" style="flex: 1;">
-      <button type="button" class="icon-btn" data-remove-subtask="${index}">🗑️</button>
+      <button type="button" class="icon-btn" data-remove-subtask="${index}" style="font-size: 20px; color: var(--muted);">×</button>
     `;
     container.appendChild(div);
     
@@ -535,7 +535,7 @@ class TaskManager {
     const grouped = {};
     
     this.tasks.forEach(task => {
-      const cat = task.category || 'Uncategorized';
+      const cat = task.category || 'General';
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat].push(task);
     });
