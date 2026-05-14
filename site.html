@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Dashboard - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="site-style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <button class="btn-link" id="backToDashboard">← Dashboard</button>
+      <h1 class="site-title" id="siteTitle">William's Portfolio</h1>
+    </div>
+    <div class="header-right">
+      <button class="btn-secondary" id="alertLogBtn">
+        Alerts
+        <span class="alert-badge" id="alertCount">3</span>
+      </button>
+      <div class="user-badge">
+        <span id="currentUser">Jesse</span>
+        <div class="user-dropdown" id="userDropdown">
+          <button class="dropdown-item" id="viewAsClient">View as William</button>
+          <button class="dropdown-item">Settings</button>
+          <button class="dropdown-item">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alert Banner -->
+  <div class="alert-banner" id="alertBanner" style="display: none;">
+    <div class="alert-content">
+      <span class="alert-text" id="alertText"></span>
+      <div class="alert-actions">
+        <button class="alert-btn btn" id="alertAddTask">Add to Tasks</button>
+        <button class="alert-btn btn" id="alertResolve">Resolved</button>
+        <button class="alert-btn btn" id="alertDismissBanner">Dismiss</button>
+        <button class="alert-btn-hide btn-secondary" id="alertHide">Hide</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="site-container">
+    
+    <!-- Task Sidebar (Collapsible) -->
+    <aside class="task-sidebar" id="taskSidebar">
+      <div class="task-sidebar-header">
+        <div class="sidebar-title-row">
+          <span class="label">TASKS</span>
+          <button class="icon-btn" id="collapseTasksBtn" aria-label="Collapse tasks">▲</button>
+        </div>
+        <button class="icon-btn" id="filterTasksBtn" aria-label="Filter tasks">🔍</button>
+      </div>
+      
+      <div class="task-sidebar-content" id="taskSidebarContent">
+        <div class="task-controls">
+          <button class="btn btn-add" id="addTaskBtnTop">+ New Task</button>
+          <label class="task-toggle">
+            <input type="checkbox" id="hideCompletedToggle">
+            <span>Hide completed</span>
+          </label>
+        </div>
+
+        <div class="task-list" id="taskList">
+          <!-- Tasks rendered here -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="site-main">
+      
+      <!-- Tab Navigation -->
+      <nav class="site-tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="traffic">Traffic</button>
+        <button class="tab-btn" data-tab="analytics">Analytics</button>
+        <button class="tab-btn" data-tab="seo">SEO</button>
+        <button class="tab-btn" data-tab="shop">Shop</button>
+        <button class="tab-btn" data-tab="marketing">Marketing</button>
+      </nav>
+
+      <!-- Tab Content -->
+      <div class="tab-content active" id="overview">
+        
+        <!-- Card Grid -->
+        <div class="card-grid" id="cardGrid">
+          
+          <!-- Site Health Cards -->
+          <div class="metric-card card small" data-card-id="uptime">
+            <div class="card-header">
+              <h3 class="card-title">Uptime</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">99.94%</div>
+              <div class="metric-label">Last 30 days</div>
+            </div>
+          </div>
+
+          <div class="metric-card card small" data-card-id="ssl">
+            <div class="card-header">
+              <h3 class="card-title">SSL Certificate</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value warning">7 days</div>
+              <div class="metric-label">Until expiration</div>
+            </div>
+          </div>
+
+          <div class="metric-card card small" data-card-id="errors">
+            <div class="card-header">
+              <h3 class="card-title">Error Tracking</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-stat">
+                <span class="stat-label">404 Errors:</span>
+                <span class="stat-value">3</span>
+              </div>
+              <div class="metric-stat">
+                <span class="stat-label">Broken Images:</span>
+                <span class="stat-value error">2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Traffic & Visitors -->
+          <div class="metric-card card small" data-card-id="visitors">
+            <div class="card-header">
+              <h3 class="card-title">Total Visitors</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">1,234</div>
+              <div class="metric-change positive">↑ 12.4%</div>
+              <div class="metric-label">Last 30 days</div>
+            </div>
+          </div>
+
+          <div class="metric-card card small" data-card-id="pageviews">
+            <div class="card-header">
+              <h3 class="card-title">Page Views</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">4,567</div>
+              <div class="metric-change positive">↑ 8.2%</div>
+            </div>
+          </div>
+
+          <div class="metric-card card small" data-card-id="bounce">
+            <div class="card-header">
+              <h3 class="card-title">Bounce Rate</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">42.3%</div>
+              <div class="metric-change negative">↑ 2.1%</div>
+            </div>
+          </div>
+
+          <!-- Analytics -->
+          <div class="metric-card card small" data-card-id="session-duration">
+            <div class="card-header">
+              <h3 class="card-title">Avg Session Duration</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">2m 34s</div>
+              <div class="metric-change positive">↑ 15s</div>
+            </div>
+          </div>
+
+          <!-- SEO -->
+          <div class="metric-card card small" data-card-id="domain-authority">
+            <div class="card-header">
+              <h3 class="card-title">Domain Authority</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">—</div>
+              <div class="metric-label">Not configured</div>
+            </div>
+          </div>
+
+          <!-- E-Commerce (Wide Bar) -->
+          <div class="metric-card card small wide" data-card-id="sales">
+            <div class="card-header">
+              <h3 class="card-title">Sales Overview</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">—</div>
+              <div class="metric-label">E-commerce not configured</div>
+            </div>
+          </div>
+
+          <!-- Marketing (Wide Bar) -->
+          <div class="metric-card card small wide" data-card-id="campaigns">
+            <div class="card-header">
+              <h3 class="card-title">Active Campaigns</h3>
+              <button class="icon-btn card-pin-btn" data-pinned="false">📌</button>
+            </div>
+            <div class="card-content">
+              <div class="metric-value">—</div>
+              <div class="metric-label">No active campaigns</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Traffic Tab -->
+      <div class="tab-content" id="traffic">
+        <div class="card-grid">
+          <p style="color: var(--muted); padding: 40px;">Traffic-specific cards will appear here</p>
+        </div>
+      </div>
+
+      <!-- Other tabs... -->
+
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="alerts.js"></script>
+  <script src="tasks.js"></script>
+  <script src="site.js"></script>
+
+</body>
+</html>

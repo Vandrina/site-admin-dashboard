@@ -80,7 +80,8 @@ class Dashboard {
     document.querySelectorAll('.site-card').forEach(card => {
       card.addEventListener('click', () => {
         const siteId = card.dataset.siteId;
-        this.openSiteDetail(siteId);
+        // Navigate to single site view
+        window.location.href = `site.html?site=${siteId}`;
       });
     });
   }
